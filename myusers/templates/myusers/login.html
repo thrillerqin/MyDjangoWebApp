@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录界面</title>
+</head>
+<body>
+    {% extends 'myapp/base.html' %}
+
+    {% block content111 %}
+        {% if form.errors %}
+            <p>你的用户名和密码不匹配，请重试。</p>
+        {% endif %}
+
+        <form method="post" action="{% url 'myusers:login' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button name="submit">log in</button>
+            <input type="hidden" name="next" value="{%url 'myapp:index' %}" />
+        </form>
+    {% endblock content111 %}
+</body>
+</html>

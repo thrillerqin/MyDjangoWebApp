@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>topic</title>
+</head>
+<body>
+    {% extends 'myapp/base.html' %}
+
+    {% block content111 %}
+        <p>主题：{{ topic }}</p>
+        <p>所有文章：</p>
+        <p>
+            <a href="{% url 'myapp:new_entry' topic.id %}"> 添加新文章 </a>
+        </p>
+        <ul>
+            {% for entry in entries %}
+                <li>
+                    <p>{{entry.date_added|date:'M d, Y H:i'}}</p>
+                    <p>{{entry.text|linebreaks}}</p>
+                </li>
+            {% empty %}
+                <li>
+                    还没有这个主题的文章
+                </li>
+            {% endfor %}
+        </ul>
+    {% endblock content111 %}
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新建文章</title>
+</head>
+<body>
+    {% extends "myapp/base.html" %}
+
+    {% block content111 %}
+        <p><a href = "{% url 'myapp:topic' topic.id %}">{{ topic }}</a></p>
+        <p>添加一篇新文章：</p>
+
+        <form action="{% url 'myapp:new_entry' topic.id %}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button name="sumit">添加文章</button>
+        </form>
+    {% endblock content111 %}
+</body>
+</html>
