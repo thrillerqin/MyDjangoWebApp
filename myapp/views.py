@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from .models import Topic
-from .forms import TopicForm,EntryForm
+from .models import Topic,BdnkData
+from .forms import TopicForm,EntryForm,BdnkDataForm
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -61,3 +61,46 @@ def new_entry(request, topic_id):
 
     context = {'topic': topic, 'form': form}
     return render(request, 'myapp/new_entry.html', context)
+
+def bdnk_data_set(request):
+    '''北斗纽扣的数据'''
+    if request.method != 'POST':
+        # 未提交数据：创建一个新表单
+        form = BdnkDataForm()
+    else:
+        # POST提交的数据,对数据进行处理
+        # form = BdnkDataForm(request.POST)
+        # print('qinbao request post:')
+        # print(request.POST)
+        # for key,value in request.POST.items():
+        #     print(key + ':' + value)
+        # qb_dict = {'csrfmiddlewaretoken': ['0UkAdxltHK7LmO9v3BqG7iPVOsltS0nQAvX21WNb90Ch9QPJZ2RzPoIUd7UyKEVH'],
+        #              'elapse': ['qinbao-elc'], 'locate_mode': ['qinbao_lmode'], 'si': ['qinbao-si'], 'long': ['qinbao-long'],
+        #              'bat': ['qinbao-bat'], 'sumit': [''], 'lat': ['qinbao_lat']}
+        qb_dict = {	"lat":	"39.823532",
+                    "long":	"116.284368",
+                    "locate_mode":	"LBS",
+                    "bat":	"84",
+                    "si":	"24",
+                    "elapse":	"71493",
+                    "time":	"2019-03-21 13:50:41",
+                    "interval":	"100"}
+        form = BdnkDataForm(qb_dict)
+        print('qb_dict:')
+        print(qb_dict)
+        # for key,value in qb_dict.items():
+        #     print(key + ':' + value)
+    if form.is_valid():
+        form.bdnk_device_data_record = 12345
+        form.save()
+        return HttpResponseRedirect(reverse('myapp:bdnk_data_list'))
+
+    context = {'bdnk_data_form123': form}
+    return render(request, 'myapp/bdnk_data_set.html', context)
+
+def bdnk_data_list(request):
+    '''显示所有的北斗纽扣数据'''
+    bdnk_datas = BdnkData.objects.all()
+    context = {'bdnk_datas':bdnk_datas}
+    return render(request, 'myapp/bdnk_data_list.html', context)
+

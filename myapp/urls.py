@@ -8,7 +8,7 @@
 
 # from django.conf.urls import url
 from django.urls import path,re_path
-from . import views
+from . import views, tests
 
 urlpatterns = [
     # 主页
@@ -22,6 +22,12 @@ urlpatterns = [
     re_path('^new_topic/$', views.new_topic, name='new_topic'),
     # 用于添加新文章的页面
     re_path('^new_entry/(?P<topic_id>\d+)/$', views.new_entry, name = 'new_entry'),
+
+    re_path(r'^test_set_form$', tests.test_set_form, name = 'test_set_form'),
+    re_path(r'^test_set$', tests.test_set, name = 'test_set'),
+
+    re_path(r'^bdnk_data_set$', views.bdnk_data_set, name = 'bdnk_data_set'),
+    re_path(r'^bdnk_data_list$', views.bdnk_data_list, name = 'bdnk_data_list'),
 ]
 
 # from django.conf.urls import url
