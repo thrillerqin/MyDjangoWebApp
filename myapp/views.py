@@ -91,7 +91,7 @@ def bdnk_data_set(request):
         # for key,value in qb_dict.items():
         #     print(key + ':' + value)
     if form.is_valid():
-        form.bdnk_device_data_record = 12345
+        print('saving qb_dict')
         form.save()
         return HttpResponseRedirect(reverse('myapp:bdnk_data_list'))
 

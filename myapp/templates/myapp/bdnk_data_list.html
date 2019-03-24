@@ -10,15 +10,17 @@
     {% block content111 %}
     <h2>北斗纽扣接收到的数据列表</h2>
     <table border="0">
-        <caption>lat  |  long  |  locate_mode  |  bat  |  si  |  elapse</caption>
+        <caption>lat  |  long  |    altitude  |   locate_mode  |  bat  |  si  |  elapse    |   time </caption>
         {% for bdnkitem in bdnk_datas %}
             <tr>
                 <td>{{bdnkitem.lat}}</td>
                 <td>{{bdnkitem.long}}</td>
+                <td>{{bdnkitem.altitude}}</td>
                 <td>{{bdnkitem.locate_mode}}</td>
                 <td>{{bdnkitem.bat}}</td>
                 <td>{{bdnkitem.si}}</td>
                 <td>{{bdnkitem.elapse}}</td>
+                <td>{{bdnkitem.time}}</td>
             </tr>
         {% empty %}
             <li>

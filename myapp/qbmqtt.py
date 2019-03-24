@@ -22,7 +22,7 @@ def client_loop():
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
-    client.subscribe("/Z001/867186032871013/123456789/data")
+    client.subscribe("/Z001/867186030831084/123456789/data")
 
 def on_message(client, userdata, msg):
     print(msg.topic+" "+msg.payload.decode("utf-8"))

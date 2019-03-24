@@ -17,6 +17,6 @@ class EntryForm(forms.ModelForm):
 class BdnkDataForm(forms.ModelForm):
     class Meta:
         model = BdnkData
-        fields = ['lat', 'long', 'locate_mode', 'bat', 'si', 'elapse']
+        fields = ['lat', 'long', 'locate_mode', 'bat', 'si', 'elapse', 'time']
         # 以下这句把标签给清空了
         # labels = {'lat':'', 'long':'', 'locate_mode':'', 'bat':'', 'si':'', 'elapse':''}

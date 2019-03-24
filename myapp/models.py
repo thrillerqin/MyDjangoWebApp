@@ -57,6 +57,7 @@ class BdnkData(models.Model):
     '''北斗纽扣接收数据的'''
     # bdnk_device_data_record = models.ForeignKey(BdnkDeviceIdInfo, on_delete=models.CASCADE)
     # bdnk_device_data_record = models.ForeignKey(User, on_delete=models.CASCADE)
+    # bdnk_owner = models.ForeignKey(User, on_delete=models.CASCADE)
     sn = models.CharField(max_length=20,default='')
     imei = models.CharField(max_length=20,default='')
     lat = models.CharField(max_length=20,default='')
