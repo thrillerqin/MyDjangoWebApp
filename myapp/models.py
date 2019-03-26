@@ -28,20 +28,20 @@ class Entry(models.Model):
 
 class BdnkDeviceIdInfo(models.Model):
     '''用户设备信息（外键User）,device_id_info'''
-    bdnk_device_id_info = models.ForeignKey(User, on_delete=models.CASCADE)
+    # bdnk_device_id_info = models.ForeignKey(User, on_delete=models.CASCADE)
     sn = models.CharField(max_length=20, default='')
-    imei = models.CharField(max_length=20, default='')  #, primary_key=True)
-    ccid = models.CharField(max_length=20, default='')
-    imsi = models.CharField(max_length=20, default='')
+    imei = models.CharField(max_length=20, default='')
+    ccid = models.CharField(max_length=30, default='')
+    imsi = models.CharField(max_length=20, default='0000')
     version = models.CharField(max_length=20, default='')
     product_type = models.CharField(max_length=20, default='Z001')
 
     def __str__(self):
-        return self.imei
+        return 'BdnkDeviceIdInfo'
 
 class BdnkDeviceStatus(models.Model):
     '''用户设备状态信息'''
-    bdnk_device_status = models.ForeignKey(User, on_delete=models.CASCADE)
+    # bdnk_device_status = models.ForeignKey(User, on_delete=models.CASCADE)
     sn = models.CharField(max_length=20,default='')
     imei = models.CharField(max_length=20,default='')
     interval = models.CharField(max_length=20, default='')

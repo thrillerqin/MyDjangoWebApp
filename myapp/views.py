@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from .models import Topic,BdnkData
-from .forms import TopicForm,EntryForm,BdnkDataForm
 from django.contrib.auth.decorators import login_required
+
+from .models import Topic,BdnkData,BdnkDeviceIdInfo
+from .forms import TopicForm,EntryForm,BdnkDataForm,BdnkDeviceIdInfoForm
 
 # Create your views here.
 def index(request):
@@ -104,3 +105,35 @@ def bdnk_data_list(request):
     context = {'bdnk_datas':bdnk_datas}
     return render(request, 'myapp/bdnk_data_list.html', context)
 
+def bdnk_device_register(request):
+    '''北斗纽扣设备注册'''
+    if request.method != 'POST':
+        # 未提交数据：创建一个新表单
+        form = BdnkDeviceIdInfoForm()
+    else:
+        # POST提交的数据,对数据进行处理
+        form = BdnkDeviceIdInfoForm(request.POST)
+        print('qinbao request post:')
+        print(request.POST)
+        for key,value in request.POST.items():
+            print(key + ':' + value)
+
+        # qb_dict = {	'sn':'123', 'imei':'123', 'ccid':'123', 'imsi':'123', 'version':'123', 'product_type':'123'}
+        #
+        qb_dict = {'product_type': 'Z001', 'ccid': '89860402101890678477', 'version': '18041801', 'sn': '123456789', 'imsi': 'x',
+         'imei': '867186032871013'}
+        form = BdnkDeviceIdInfoForm(qb_dict)
+        # form = BdnkDeviceIdInfoForm(request.POST)
+    if form.is_valid():
+        print('saving BdnkDeviceIdInfoForm')
+        form.save()
+        return HttpResponseRedirect(reverse('myapp:bdnk_device_id_info_list'))
+
+    context = {'bdnk_device_id_info_form123': form}
+    return render(request, 'myapp/bdnk_device_id_info_set.html', context)
+
+def bdnk_device_id_info_list(request):
+    '''显示所有的北斗纽扣数据'''
+    bdnk_device_id_infos = BdnkDeviceIdInfo.objects.all()
+    context = {'bdnk_device_id_infos':bdnk_device_id_infos}
+    return render(request, 'myapp/bdnk_device_id_info_list.html', context)

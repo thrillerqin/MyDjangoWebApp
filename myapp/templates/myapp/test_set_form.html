@@ -2,11 +2,11 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>菜鸟教程(runoob.com)</title>
+<title>北斗纽扣</title>
 </head>
 <body>
     <form action="/test_set" method="get">
-        <input type="text" name="q">
+        <input type="text" name="q" value={{qb_var123}}>
         <input type="submit" value="搜索">
     </form>
 
@@ -24,6 +24,15 @@
             Date of birth: <input type="text" size="10">
             <br>
             <input type="submit" value="Submit" />
+        </fieldset>
+    </form>
+
+    <form action="/bdnk_device_set" method="get">
+        <fieldset>
+        <legend>北斗纽扣设备参数设置:</legend>
+            消息发送间隔: <input type="text" name = 'bdnk_internal_time_s' size="10">
+            <br>
+            <input type="submit" value="设置" />
         </fieldset>
     </form>
 

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>北斗纽扣设备信息列表</title>
+</head>
+<body>
+    {% extends 'myapp/base.html' %}
+
+    {% block content111 %}
+    <h2>北斗纽扣设备信息列表</h2>
+    <table border="0">
+        <caption>sn  |  imei  |    ccid  |   imsi  |  version  |  product_type  </caption>
+        {% for item in bdnk_device_id_infos %}
+            <tr>
+                <td>{{item.sn}}</td>
+                <td>{{item.imei}}</td>
+                <td>{{item.ccid}}</td>
+                <td>{{item.imsi}}</td>
+                <td>{{item.version}}</td>
+                <td>{{item.product_type}}</td>
+            </tr>
+        {% empty %}
+            <li>
+                还没有这个主题的文章
+            </li>
+        {% endfor %}
+    </table>
+    {% endblock content111 %}
+</body>
+</html>

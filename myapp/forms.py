@@ -1,5 +1,5 @@
 from django import forms
-from .models import Topic,Entry,BdnkData
+from .models import Topic,Entry,BdnkData,BdnkDeviceIdInfo
 
 class TopicForm(forms.ModelForm):
     class Meta:
@@ -20,3 +20,9 @@ class BdnkDataForm(forms.ModelForm):
         fields = ['lat', 'long', 'locate_mode', 'bat', 'si', 'elapse', 'time']
         # 以下这句把标签给清空了
         # labels = {'lat':'', 'long':'', 'locate_mode':'', 'bat':'', 'si':'', 'elapse':''}
+
+class BdnkDeviceIdInfoForm(forms.ModelForm):
+    class Meta:
+        model = BdnkDeviceIdInfo
+        fields = ['sn', 'imei', 'ccid', 'imsi', 'version', 'product_type']
+

@@ -8,7 +8,7 @@
 
 # from django.conf.urls import url
 from django.urls import path,re_path
-from . import views, tests
+from . import views, tests, qbmqtt
 
 urlpatterns = [
     # 主页
@@ -28,6 +28,11 @@ urlpatterns = [
 
     re_path(r'^bdnk_data_set$', views.bdnk_data_set, name = 'bdnk_data_set'),
     re_path(r'^bdnk_data_list$', views.bdnk_data_list, name = 'bdnk_data_list'),
+
+    re_path(r'^bdnk_device_register$', views.bdnk_device_register, name = 'bdnk_device_register'),
+    re_path(r'^bdnk_device_id_info_list$', views.bdnk_device_id_info_list, name = 'bdnk_device_id_info_list'),
+
+    re_path(r'^bdnk_device_set$', qbmqtt.bdnk_device_set, name = 'bdnk_device_set'),
 ]
 
 # from django.conf.urls import url

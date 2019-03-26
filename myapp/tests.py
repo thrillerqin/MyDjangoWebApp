@@ -11,7 +11,10 @@ print('run tests.py')
 # Create your tests here.
 # 表单
 def test_set_form(request):
-    return render(request, 'myapp/test_set_form.html')
+    var123 = 'qinbao123'
+    context = {'qb_var123': var123}
+
+    return render(request, 'myapp/test_set_form.html', context)
 
 
 # 接收请求数据
