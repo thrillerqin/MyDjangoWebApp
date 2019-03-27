@@ -16,21 +16,19 @@
         <input type="submit" value="Submit" />
     </form>
 
-    <form action="">
+    <form action="/bdnk_device_set" method="get">
         <fieldset>
-        <legend>Personal information:</legend>
-            Name: <input type="text" size="30"><br>
-            E-mail: <input type="text" size="30"><br>
-            Date of birth: <input type="text" size="10">
+        <legend>北斗纽扣设备参数设置:</legend>
+            LED开关(开关量；范围：0-开，1-关）: <input type="text" name='bdnk_led' pattern="^[0,1]$" size="10">
             <br>
-            <input type="submit" value="Submit" />
+            <input type="submit" value="设置" />
         </fieldset>
     </form>
 
     <form action="/bdnk_device_set" method="get">
         <fieldset>
         <legend>北斗纽扣设备参数设置:</legend>
-            消息发送间隔: <input type="text" name = 'bdnk_internal_time_s' size="10">
+            消息发送间隔(单位：秒，范围：10~3600）: <input type="text" name='bdnk_internal_time_s' pattern="^[0-3][0-9]|[10-9][0-9]$" size="10">
             <br>
             <input type="submit" value="设置" />
         </fieldset>

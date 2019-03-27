@@ -1,5 +1,6 @@
 import paho.mqtt.client as mqtt
 import time
+import json
 
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
@@ -10,17 +11,19 @@ from django.http import HttpResponseRedirect,HttpResponse
 from .models import Topic,BdnkData,BdnkDeviceIdInfo,BdnkDeviceStatus
 from .forms import TopicForm,EntryForm,BdnkDataForm,BdnkDeviceIdInfoForm
 
-global ZJSD_BDNK_MQTT_TOPIC_DATA
+global ZJSD_BDNK_MQTT_TOPIC_DATA, ZJSD_BDNK_MQTT_TOPIC_SET
 
 HOST = "www.ry9r4e4.mqtt.iot.bj.baidubce.com"
 PORT = 1883
 ZJSD_BDNK_MQTT_TOPIC_DATA = 'this  is a trap!!!!!!!!!!!!!!!!!!!!!!!!'
+ZJSD_BDNK_MQTT_TOPIC_SET = 'this  is a trap!!!!!!!!!!!!!!!!!!!!!!!!'
 ZJSD_BDNK_MQTT_TOPIC_REGISTER = '/zjsd/device/register'
-
+client_id = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
+client = mqtt.Client(client_id)  # ClientId不能重复，所以使用当前时间
 
 def client_loop():
-    client_id = time.strftime('%Y%m%d%H%M%S',time.localtime(time.time()))
-    client = mqtt.Client(client_id)    # ClientId不能重复，所以使用当前时间
+    # client_id = time.strftime('%Y%m%d%H%M%S',time.localtime(time.time()))
+    # client = mqtt.Client(client_id)    # ClientId不能重复，所以使用当前时间
     client.username_pw_set("ry9r4e4/qinbao", "B1LI6gzQp+2j7NtcpTVYg4+6I8lbKTL4ncXLndqFY4Q=")  # 必须设置，否则会返回「Connected with result code 4」
     client.on_connect = on_connect
     client.on_message = on_message
@@ -68,6 +71,7 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
     global ZJSD_BDNK_MQTT_TOPIC_DATA
+    global ZJSD_BDNK_MQTT_TOPIC_SET
     # print(msg.topic+" "+msg.payload.decode("utf-8"))
     if (msg.topic == ZJSD_BDNK_MQTT_TOPIC_REGISTER):    # 注册主题
         print('received register message')
@@ -80,11 +84,10 @@ def on_message(client, userdata, msg):
         #             'imei': '867186032871013'}
         my_mqtt_topic = '/'
         my_mqtt_topic = my_mqtt_topic.join([qb_dict['product_type'], qb_dict['imei'], qb_dict['sn']])
-        my_mqtt_topic = '/' + my_mqtt_topic + '/data'
-        print(my_mqtt_topic)
-        print('subscribe topic: ' + my_mqtt_topic)
-        client.subscribe(my_mqtt_topic)
-        ZJSD_BDNK_MQTT_TOPIC_DATA = my_mqtt_topic
+        ZJSD_BDNK_MQTT_TOPIC_SET = '/' + my_mqtt_topic + '/set'
+        ZJSD_BDNK_MQTT_TOPIC_DATA = '/' + my_mqtt_topic + '/data'
+        print('subscribe topic: ' + ZJSD_BDNK_MQTT_TOPIC_DATA)
+        client.subscribe(ZJSD_BDNK_MQTT_TOPIC_DATA)
 
         print('qb_dict:')
         print(qb_dict)
@@ -148,14 +151,53 @@ def on_message(client, userdata, msg):
             print('saving BdnkData')
             form.save()
 
+def on_publish():
+    print('on_publish...')
 
 def bdnk_device_set(request):
-    request.encoding = 'utf-8'
+    global ZJSD_BDNK_MQTT_TOPIC_DATA
+    global ZJSD_BDNK_MQTT_TOPIC_SET
+
     if 'bdnk_internal_time_s' in request.GET:
-        message = '北斗纽扣的消息间隔: ' + request.GET['bdnk_internal_time_s']
+        request.encoding = 'utf-8'
+        my_request = request.GET['bdnk_internal_time_s']
+        setv_interval = int(my_request)
+        if((setv_interval >= 60) and (setv_interval <= 3600)):
+            print(type(my_request), my_request)
+            my_request_dict = {}
+            my_request_dict["interval"] = setv_interval
+            print (type(my_request_dict), my_request_dict)
+            # my_str = str(my_request_dict) # 字典通过str()转换的字符串的键值是单引号
+            # print (type(str(my_str)), str(my_str))
+            qb_json_str = json.dumps(my_request_dict) # 字典通过json.dump()转换的字符串的键值是双引号
+            print (type(str(qb_json_str)), str(qb_json_str))
+
+            print(ZJSD_BDNK_MQTT_TOPIC_SET)
+            client.publish(ZJSD_BDNK_MQTT_TOPIC_SET, qb_json_str)
+            message = '设置成功！！！<br>北斗纽扣的消息发送间隔: ' + request.GET['bdnk_internal_time_s']
+        else:
+            message = '设置间隔%d超出范围' % setv_interval
+    elif 'bdnk_led' in request.GET:
+        request.encoding = 'utf-8'
+        my_request = request.GET['bdnk_led']
+        ledv = int(my_request)
+        if((ledv == 0) and (ledv == 1)):
+            print(type(my_request), my_request)
+            my_request_dict = {}
+            my_request_dict["led"] = ledv
+            print (type(my_request_dict), my_request_dict)
+            # my_str = str(my_request_dict) # 字典通过str()转换的字符串的键值是单引号
+            # print (type(str(my_str)), str(my_str))
+            qb_json_str = json.dumps(my_request_dict) # 字典通过json.dump()转换的字符串的键值是双引号
+            print (type(str(qb_json_str)), str(qb_json_str))
+
+            print(ZJSD_BDNK_MQTT_TOPIC_SET)
+            client.publish(ZJSD_BDNK_MQTT_TOPIC_SET, qb_json_str)
+            message = '设置成功！！！<br>北斗纽扣的消息发送间隔: ' + request.GET['bdnk_internal_time_s']
+        else:
+            message = '设置间隔%d超出范围' % setv_interval
     else:
         message = '你提交了空表单！'
-    print(message)
     return HttpResponse(message)
 
 if __name__ == '__main__':
